@@ -37,7 +37,7 @@ def instantiate_spotipy_object():
     SPOTIPY_CLIENT_ID = client_id
     SPOTIPY_CLIENT_SECRET = client_secret
     #SPOTIPY_REDIRECT_URI = 'https://inferential-spotify-dashboard.streamlit.app/'
-    SPOTIPY_REDIRECT_URI = 'http://localhost:8080/callback' # for testing
+    SPOTIPY_REDIRECT_URI = 'http://localhost:8501/callback' # for testing
     SCOPE= 'user-library-read user-library-modify playlist-read-private playlist-modify-private user-top-read'
 
     #Initialize the Spotify client
