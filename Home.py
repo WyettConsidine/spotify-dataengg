@@ -152,11 +152,82 @@ def fetch_song_meta(sp):
         st.warning(f"No track found with the name '{track_name}'")
 
 
+##song recomendation system:
+#Main Idea: add a tab to the app that allows the user to unput parameters for a new song recomendation. 
+#Allows user to set speed of music, dancability, tone, etc.
+#App then uses spotify to get song recomendations based on user input and user previous history. 
+
+def song_recomender(sp):
+    print("hello")
+    def get_recommendations(genres, num_songs):
+        seed_genres = genres
+        print(f"Seed genres = " + str(seed_genres))
+        recommendations = sp.recommendations(seed_genres=seed_genres, limit=num_songs)
+        return recommendations['tracks']
+
+
+    st.header("Song Recomendation System")
+    st.subheader("Welcome to the song recomenadation page.")
+    st.write("In this page, you can tune the parameters below to find the perfect songs for you right now! ")
+    st.write("The song recomendtions will be based off of both the inputs you provide, and your previous listening history.")
+
+    num_songs = st.slider("Number of Songs", min_value=1, max_value=20, value=5)
+    # Dropdown 2
+    genreList =  '''Pop
+                    Rock
+                    Hip-Hop
+                    Rap
+                    R&B (Rhythm and Blues)
+                    Jazz
+                    Blues
+                    Country
+                    Folk
+                    Electronic
+                    Dance
+                    Indie
+                    Alternative
+                    Classical
+                    Reggae
+                    Metal
+                    Punk
+                    Funk
+                    Soul
+                    Gospel
+                    World
+                    Latin
+                    Ambient
+                    Dubstep
+                    Techno
+                    House
+                    Trance
+                    Ska
+                    Grunge
+                    Experimental'''
+    genres = genreList.replace("\n", ", ").split(",")
+    genres = [g.strip().lower() for g in genres]
+
+    selectGeneres = st.multiselect("Select up to 5 genres", genres, max_selections = 5)
+
+    # Dropdown 3
+    #option3 = st.selectbox("Genre 2", ["Choose", "Option 3A", "Option 3B", "Option 3C"])
+
+    # Submit button
+
+    if st.button("Get Recommendations"):
+        if not selectGeneres:
+            st.warning("Please select at least one genre.")
+        else:
+            recommendations = get_recommendations(selectGeneres, num_songs)
+            st.subheader("Recommended Songs:")
+            for idx, track in enumerate(recommendations):
+                st.write(f"{idx + 1}. {track['name']} by {', '.join([artist['name'] for artist in track['artists']])}")
+
+
+
 # main interface -- app starts here
 def main_cs():
 
-    # Initialize session state
-    
+    # Initialize session state    
 
     setfonts()
     maketitle()
@@ -173,7 +244,7 @@ def main_cs():
     st.divider()
 
 
-    options = st.sidebar.selectbox("What do you want to know?", ["Select", "Current Trends", "Compare Playlists", "Playlist Variability Analysis",
+    options = st.sidebar.selectbox("What do you want to know?", ["Select", "Song Recomender", "Current Trends", "Compare Playlists", "Playlist Variability Analysis",
                                                                  "Know the Artist", "Song Meta-Info", "Your Playlist Analysis", "Wrapped!"])
 
 
@@ -188,6 +259,8 @@ def main_cs():
 
     elif options == "Wrapped!":
         spotipy_wrapped(sp)
+    elif options == "Song Recomender":
+        song_recomender(sp)
    
 
 
